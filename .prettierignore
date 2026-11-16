@@ -1,0 +1,13 @@
+node_modules
+dist
+.output
+.vinxi
+.vercel
+.wrangler
+.tanstack
+.nitro
+pnpm-lock.yaml
+package-lock.json
+bun.lock
+routeTree.gen.ts
+midias.gen.ts

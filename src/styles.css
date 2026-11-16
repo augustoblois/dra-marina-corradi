@@ -1,0 +1,583 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+/*
+ * Fontes servidas pelo próprio site (antes vinham do Google Fonts, e o CSS de
+ * outro domínio travava a primeira pintura da página). São os mesmos arquivos
+ * que o Google entregava, recorte "latin" (cobre todo o português), licença
+ * SIL Open Font License 1.1. As faixas de peso repetem as que a página pedia
+ * ao Google, para nenhum texto mudar de peso.
+ */
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500 600;
+  font-display: swap;
+  src: url("./assets/fonts/cormorant-garamond.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./assets/fonts/cormorant-garamond-italico-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./assets/fonts/cormorant-garamond-italico-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./assets/fonts/montserrat.woff2") format("woff2");
+}
+
+/*
+ * Fontes de reserva com as medidas das fontes da marca (a técnica do
+ * next/font). Com internet lenta, a Montserrat e a Cormorant chegam depois da
+ * primeira pintura; até lá o texto aparece numa fonte do sistema, e a troca
+ * empurrava o título e os itens da abertura (CLS de até 0,023 com as fontes
+ * 1,5 s atrasadas). Aqui a fonte do sistema é redimensionada para ocupar o
+ * mesmo espaço da fonte da marca, e a troca não move nada.
+ *
+ * Valores: size-adjust é a razão de largura medida no próprio texto da página
+ * (o corrido, os itens e os títulos, em português), porque a média do alfabeto
+ * inglês que o next/font usa errava até 2% e mudava palavras de linha.
+ * ascent/descent saem das métricas do capsize (as do Next.js) divididas pelo
+ * size-adjust. Arial e Times New Roman existem no iPhone, no Mac e no Windows;
+ * Roboto e Noto Serif são as fontes do Android, que não tem as duas.
+ */
+@font-face {
+  font-family: "Montserrat Reserva";
+  font-weight: 400 500;
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 110.96%;
+  ascent-override: 87.24%;
+  descent-override: 22.62%;
+  line-gap-override: 0%;
+}
+
+/* O negrito (font-semibold, 600) é mais largo que o regular: reserva própria. */
+@font-face {
+  font-family: "Montserrat Reserva";
+  font-weight: 600 700;
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  size-adjust: 107.8%;
+  ascent-override: 89.8%;
+  descent-override: 23.28%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Montserrat Reserva Android";
+  font-weight: 400 500;
+  src: local("Roboto"), local("Roboto-Regular");
+  size-adjust: 111.9%;
+  ascent-override: 86.51%;
+  descent-override: 22.43%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Montserrat Reserva Android";
+  font-weight: 600 700;
+  src: local("Roboto Bold"), local("Roboto-Bold");
+  size-adjust: 114.8%;
+  ascent-override: 84.32%;
+  descent-override: 21.86%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Cormorant Reserva";
+  font-style: normal;
+  src: local("Times New Roman"), local("TimesNewRomanPSMT");
+  size-adjust: 96.3%;
+  ascent-override: 95.95%;
+  descent-override: 29.8%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Cormorant Reserva";
+  font-style: italic;
+  src: local("Times New Roman Italic"), local("TimesNewRomanPS-ItalicMT");
+  size-adjust: 87.4%;
+  ascent-override: 105.72%;
+  descent-override: 32.84%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Cormorant Reserva Android";
+  font-style: normal;
+  src: local("Noto Serif"), local("NotoSerif-Regular");
+  size-adjust: 81.7%;
+  ascent-override: 113.1%;
+  descent-override: 35.13%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Cormorant Reserva Android";
+  font-style: italic;
+  src: local("Noto Serif Italic"), local("NotoSerif-Italic");
+  size-adjust: 76.3%;
+  ascent-override: 121.1%;
+  descent-override: 37.61%;
+  line-gap-override: 0%;
+}
+
+/*
+ * Sistema visual da LP da Dra. Marina Corradi.
+ *
+ * Vem do universo dela, não de um tema pronto: o marfim e a areia das paredes
+ * da Corradi Derma, o espresso dos blazers e da madeira, o dourado champanhe do
+ * painel "Marina Corradi · Medicina Estética" e o caramelo das poltronas de
+ * couro. A tipografia repete a dos posts dela: serifa clássica com itálico para
+ * a palavra que importa, e caixa-alta espaçada nos rótulos.
+ *
+ * Os nomes `brand-*` são os mesmos das LPs de referência da Medlabs, para as
+ * seções clonadas continuarem funcionando; os VALORES são da Dra. Marina.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-bg-elevated: var(--brand-bg-elevated);
+  --color-brand-bg-soft: var(--brand-bg-soft);
+  --color-brand-sand: var(--brand-sand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-espresso: var(--brand-espresso);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-bright: var(--brand-gold-bright);
+  --color-brand-bronze: var(--brand-bronze);
+  --color-brand-caramel: var(--brand-caramel);
+  --color-brand-wine: var(--brand-wine);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-dark: var(--brand-green-dark);
+  --color-brand-chip: var(--brand-chip);
+  --color-brand-chip-foreground: var(--brand-chip-foreground);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Marfim da página e areia das seções alternadas. */
+  --brand-cream: oklch(0.975 0.008 78);
+  --brand-bg-elevated: oklch(0.992 0.004 78);
+  --brand-bg-soft: oklch(0.95 0.014 72);
+  --brand-sand: oklch(0.88 0.024 70);
+
+  /* Espresso: texto e seções escuras. */
+  --brand-ink: oklch(0.25 0.025 50);
+  --brand-muted: oklch(0.46 0.022 55);
+  --brand-espresso: oklch(0.2 0.018 50);
+
+  /* Dourado champanhe só como ornamento ou sobre fundo escuro; sobre o marfim,
+     texto de destaque usa o bronze, que passa no contraste AA (≈5:1). */
+  --brand-gold: oklch(0.76 0.1 78);
+  --brand-gold-bright: oklch(0.87 0.075 85);
+  --brand-bronze: oklch(0.5 0.08 62);
+  --brand-caramel: oklch(0.6 0.105 55);
+  --brand-wine: oklch(0.36 0.1 18);
+
+  /* Verde do agendamento: escuro o bastante para texto branco passar no AA. */
+  --brand-green: oklch(0.55 0.14 150);
+  --brand-green-dark: oklch(0.45 0.12 152);
+
+  --brand-chip: oklch(0.93 0.03 75);
+  --brand-chip-foreground: oklch(0.32 0.04 55);
+
+  --gradient-gold: linear-gradient(
+    135deg,
+    oklch(0.88 0.07 85),
+    oklch(0.76 0.1 78) 50%,
+    oklch(0.62 0.1 68)
+  );
+  --gradient-green: linear-gradient(
+    135deg,
+    oklch(0.55 0.14 150),
+    oklch(0.5 0.13 151) 55%,
+    oklch(0.44 0.12 153)
+  );
+  --shadow-gold: 0 12px 30px -12px oklch(0.6 0.1 70 / 0.45);
+  --shadow-green: 0 14px 30px -12px oklch(0.45 0.12 152 / 0.55);
+  --shadow-soft: 0 22px 44px -28px oklch(0.25 0.03 50 / 0.45);
+
+  /* Tokens do shadcn/ui, apontados para a mesma paleta. */
+  --background: var(--brand-cream);
+  --foreground: var(--brand-ink);
+  --card: var(--brand-bg-elevated);
+  --card-foreground: var(--brand-ink);
+  --popover: var(--brand-bg-elevated);
+  --popover-foreground: var(--brand-ink);
+  --primary: var(--brand-ink);
+  --primary-foreground: var(--brand-cream);
+  --secondary: var(--brand-bg-soft);
+  --secondary-foreground: var(--brand-ink);
+  --muted: var(--brand-bg-soft);
+  --muted-foreground: var(--brand-muted);
+  --accent: var(--brand-bg-soft);
+  --accent-foreground: var(--brand-ink);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.88 0.02 72);
+  --input: oklch(0.86 0.024 72);
+  --ring: oklch(0.6 0.09 70);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    background-color: var(--brand-cream);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--brand-cream);
+    color: var(--brand-ink);
+    font-family:
+      "Montserrat", "Montserrat Reserva", "Montserrat Reserva Android", ui-sans-serif, system-ui,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Âncoras não escondem o título da seção atrás do topo da tela. */
+  [id] {
+    scroll-margin-top: 1rem;
+  }
+
+  /* Sem palavra curta sozinha na última linha dos textos, e títulos com as
+     linhas equilibradas ("Acompanhe a Dra. Marina no / Instagram" vira duas
+     linhas parecidas). O h1 fica de fora: a quebra da abertura já foi aprovada.
+     Onde o navegador não suporta, a quebra continua a de sempre. */
+  h1,
+  p,
+  li,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+.font-display {
+  font-family:
+    "Cormorant Garamond", "Cormorant Reserva", "Cormorant Reserva Android", "Times New Roman", serif;
+  letter-spacing: -0.01em;
+}
+
+/* Rótulo em caixa-alta espaçada, o mesmo dos stories dela ("PROTOCOLO VOLFORMER"). */
+.rotulo {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.text-gold-gradient {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-gold-gradient {
+  background-image: var(--gradient-gold);
+}
+
+.bg-green-gradient {
+  background-image: var(--gradient-green);
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 60s linear infinite;
+}
+
+/* Pausa sob o ponteiro e com o foco do teclado: dá tempo de tocar na foto. */
+.animate-marquee-left:hover,
+.animate-marquee-left:focus-within {
+  animation-play-state: paused;
+}
+
+/* Com movimento reduzido o carrossel para e vira rolagem lateral à mão. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-left {
+    animation: none;
+  }
+}
+
+/* Seção de tecnologia: grade de pontos que some nas bordas, como uma tela. */
+.tec-grade {
+  background-image: radial-gradient(oklch(1 0 0 / 0.08) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 85% 60% at 50% 35%, black, transparent);
+}
+
+.tec-operador {
+  box-shadow: 0 0 34px -6px oklch(0.85 0.09 82 / 0.55);
+}
+
+/* Pontos do ultrassom pulsando sobre a imagem da pele. Só animam para quem não
+   pediu movimento reduzido; senão ficam parados. */
+@media (prefers-reduced-motion: no-preference) {
+  .tec-pulso {
+    animation: tec-pulso 2.6s ease-in-out infinite;
+  }
+}
+
+@keyframes tec-pulso {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Visor em tela cheia (components/Visor.tsx)
+   Três faixas: barra em cima, palco com toda a sobra, legenda embaixo. Numa
+   pilha centralizada, a imagem empurrava os controles para fora da tela baixa,
+   e o botão de fechar era o primeiro a sumir.
+   -------------------------------------------------------------------------- */
+.visor {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.75rem;
+  padding: max(0.75rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  /* Opaco: translúcido, a página aparecia por trás da foto. */
+  background: var(--brand-espresso);
+  color: var(--brand-cream);
+}
+
+/* Não é redundante: [hidden] e .visor têm a mesma especificidade, e o
+   display: grid acima ganharia, deixando o visor aberto por cima da página. */
+.visor[hidden] {
+  display: none;
+}
+
+.visor-barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.visor-barra-acoes {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.visor-contagem {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: oklch(0.975 0.008 78 / 0.6);
+}
+
+/* 44 px: o alvo mínimo de toque da WCAG 2.2. */
+.visor-icone,
+.visor-seta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid oklch(1 0 0 / 0.2);
+  border-radius: 9999px;
+  color: var(--brand-cream);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.visor-icone:hover,
+.visor-seta:hover {
+  border-color: var(--brand-gold);
+}
+
+.visor-icone:focus-visible,
+.visor-seta:focus-visible {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 2px;
+}
+
+/* touch-action none: os gestos são do visor, não do navegador. */
+.visor-palco {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+  cursor: zoom-out;
+}
+
+/* Com mouse, respiro lateral para as setas não ficarem por baixo da foto. No
+   toque, o palco vai de borda a borda: toda foto do celular é limitada pela
+   largura, e a largura inteira é o ganho que existe. */
+@media (pointer: fine) {
+  .visor-palco {
+    padding-inline: 4.5rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .visor-palco {
+    margin-inline: -1rem;
+  }
+}
+
+.visor-palco picture {
+  display: contents;
+}
+
+.visor-img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  /* O deslocamento do zoom é medido a partir do centro do palco. */
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: zoom-in;
+}
+
+.visor-palco[data-ampliado],
+.visor-palco[data-ampliado] .visor-img {
+  cursor: grab;
+}
+
+.visor-seta {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  translate: 0 -50%;
+  background: oklch(0.2 0.018 50 / 0.6);
+}
+
+.visor-seta--antes {
+  left: 0.75rem;
+}
+
+.visor-seta--depois {
+  right: 0.75rem;
+}
+
+/* Ampliada, a borda do palco é área de arrasto: a seta sairia no caminho. */
+.visor-palco[data-ampliado] .visor-seta {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.visor-rodape {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.visor-legenda {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.visor-nota {
+  max-width: 34rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: oklch(0.975 0.008 78 / 0.65);
+}
+
+.visor-ajuda {
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: oklch(0.975 0.008 78 / 0.45);
+}
+
+/* Qual instrução aparece depende do apontador, não da largura da tela. */
+.visor-ajuda--toque {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .visor-ajuda--ponteiro {
+    display: none;
+  }
+
+  .visor-ajuda--toque {
+    display: block;
+  }
+}

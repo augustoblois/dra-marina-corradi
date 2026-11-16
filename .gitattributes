@@ -1,0 +1,3 @@
+# Fim de linha LF em qualquer sistema. Sem isto, o Git no Windows (autocrlf)
+# entrega os arquivos com CRLF e o Prettier do lint acusa erro em toda linha.
+* text=auto eol=lf
